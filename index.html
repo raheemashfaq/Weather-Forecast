@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Forecast</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./stylesheet/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="section ">
+        <!-- <h1>Pakistan zindabad</h1> -->
+        <div class="input_search">
+          <div class="input">
+            <input type="text" name="city" id="enterCity" placeholder="search" />
+          </div>
+     
+          <button class="search_icon">
+            <img src="./assets/search.png" alt="" />
+          </button>
+
+        </div>
+        <div class="error">
+          <p>Invalid city name</p>
+        </div>
+        <div class="weather">
+        <div class="img_desc ">
+          <div class="main_img">
+            <img src="./assets/drizzle.png" alt="clouds" id="main_img"/>
+          </div>
+          <div class="desc">
+            <h1 id="temp">22&#176C</h1>
+            <h2 id="city">lahore</h2>
+          </div>
+        </div>
+        <div class="weather_info">
+        <div class="humidity_perc">
+          <div class="humidity_img">
+            <img src="./assets/humidity.png" alt="">
+          </div>
+          <div class="perc_speed">
+            <div class="humi">
+              64%
+            </div>
+            <div class="humidity">
+              Humidity
+            </div>
+          </div>
+        </div>  
+        <div class="wind_speed">
+          <div class="wind_img">
+            <img src="./assets/wind.png" alt="wind">
+          </div>
+          <div class="wind_perc">
+            <div class="percent">
+              18km/h
+            </div>
+            <div class="wind">
+              Wind Speed
+            </div>
+          </div>
+        </div>  
+      </div>
+      </div>
+      </div>
+    </div>
+
+    <script>
+      const searchBox = document.querySelector('#enterCity')
+      const searchBtn = document.querySelector('.search_icon')
+      const apiKey = "c92c41ffd69dd6488c31350c44471a03";
+      const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+      const image = document.querySelector('#main_img');
+
+      async function weatherCheck(city) {
+        const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+        if(response.status == 404){
+          document.querySelector('.error').style.display = 'block';
+          document.querySelector('.weather').style.display = 'none';
+        }else{
+          var data = await response.json();
+        console.log(data)
+        document.querySelector('#city').innerHTML = data.name;
+        document.querySelector('#temp').innerHTML =Math.round(data.main.temp) +"°C";
+        document.querySelector('.humi').innerHTML = data.main.humidity + "%";
+        document.querySelector('.percent').innerHTML = data.wind.speed + "km/h";
+
+        switch (data.weather[0].main) {
+          case "Clouds":
+          image.src = './assets/clear.png';
+            break;
+          case "Clear":
+          image.src = './assets/clear.png';
+            break;
+          case "Drizzle":
+          image.src = './assets/clear.png';
+            break;
+          case "Mist":
+          image.src = './assets/clear.png';
+            break;
+          case "Rain":
+          image.src = './assets/clear.png';
+            break;
+          case "Snow":
+          image.src = './assets/clear.png';
+            break;
+          case "Wind":
+          image.src = './assets/clear.png';
+            break;
+        
+          default:
+          image.src = './assets/clouds.png';
+            break;
+        }
+        document.querySelector('.weather').style.display = "block";
+      }
+        }
+        
+      // weatherCheck('kasur');
+      searchBtn.addEventListener(('click'),()=>{
+        weatherCheck(searchBox.value);
+      })
+      searchBtn.addEventListener(('keydown'),(e)=>{
+        if(e.key === 'Enter'){
+          weatherCheck(searchBox.value);
+        }
+      })
+    </script>
+  </body>
+</html>
